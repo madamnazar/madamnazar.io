@@ -1,21 +1,25 @@
 import React from "react"
-import { Link } from "gatsby"
-
 import Layout from "../components/layout"
-import Image from "../components/image"
+import Image from "../components/Image"
 import SEO from "../components/seo"
 
+
 const IndexPage = () => (
-  <Layout>
+  <>
     <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
+    <section>
+      <header className="ta-center">
+        <h1>Welcome to MadamNazar.io</h1>
+        <h2>Here you'll find resources for Red Dead Redemption online</h2>
+      </header>
+    </section>
+    <section>
+      <p>We've built MadamNazar.io in order to help the Red dead redemption community by providing tools &amp; resources</p>
+    </section>
+    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem auto` }}>
+      <Image alt="Gatsby in Space" filename="gatsby-astronaut.png" />
     </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
+  </>
 )
 
 export default IndexPage

@@ -1,11 +1,12 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `MadamNazar.io`,
+    description: `Find Madam Nazar - Get the updated location of Madam Nazar in Red Dead Redemption 2 Online, Resources for Red Dead Redemption Online madam nazar, find madam nazar on red dead redemption 2 - rdr2 rdo`,
     author: `@gatsbyjs`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    
     {
       resolve: `gatsby-source-filesystem`,
       options: {

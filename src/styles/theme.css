@@ -1,0 +1,184 @@
+@import "https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.3/leaflet.draw.css":
+  root {
+  --Twine: #c79f6f;
+  --Armadillo: #36322a;
+  --OldTown: rgb(82, 42, 10);
+  --EcruWhite: #f4efe5;
+  --CuttySark: #5c7775;
+  --Tabasco: #ad1c18;
+  font-size: 18px;
+}
+@media (min-width: 960px) {
+  :root {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 60px;
+  }
+}
+
+.App-header {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: var(--OldTown);
+}
+
+@media (min-width: 980px) {
+  .App-header {
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  }
+  .App-header:after {
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.4));
+    z-index: -1;
+    user-select: none;
+    pointer-events: all;
+  }
+}
+
+body {
+  font-family: "RDRHapna-Regular", -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  color: var(--OldTown);
+  background: var(--EcruWhite);
+  background: url("/images/bgMainSml.jpg");
+}
+
+body:before {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/nazarBg.png"), url("/images/bgMainSml.jpg");
+  background-blend-mode: multiply;
+  background-position: bottom -150px right -150px, bottom right;
+  background-repeat: no-repeat, repeat;
+  background-size: 540px, auto;
+  z-index: 1;
+  opacity: 0.75;
+}
+
+@media (max-width: 960px) {
+  body:before {
+    display: none;
+  }
+}
+
+h1,
+h2,
+nav,
+.information {
+  font-family: "RDRrocks-sg";
+}
+
+h1,
+h2 {
+  letter-spacing: 0.05em;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 46px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+p {
+  font-weight: bold;
+}
+
+.label {
+  font-family: "RDRrocks-sg";
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.news-title {
+  text-transform: uppercase;
+  font-size: 48px;
+  letter-spacing: 1.2px;
+  font-weight: bold;
+}
+
+.subhead {
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--Armadillo);
+  border-top: 2px solid var(--Armadillo);
+  padding: 12px 0 12px 0;
+}
+
+a:not([class*="color-"]) {
+  color: var(--Tabasco);
+}
+
+.bxs-1 {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 6px 22px rgba(0, 0, 0, 0.5),
+    0 0 45px rgba(0, 0, 0, 0.25);
+}
+.bxs-2 {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 6px 22px rgba(0, 0, 0, 0.3),
+    0 0 45px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes cardDetailsAnim {
+  20% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0.5, 0, -30deg) scale(0.8);
+    transform: perspective(400px) rotate3d(1, 0.5, 0, -30deg) scale(0.8);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    box-shadow: 0 5px 15px 0 rgba(37, 44, 97, 0),
+      0 2px 4px 0 rgba(93, 100, 148, 0);
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0.5, 0, 8deg) scale(0.8);
+    transform: perspective(400px) rotate3d(1, 0.5, 0, 8deg) scale(0.8);
+    box-shadow: 0 5px 15px 0 rgba(37, 44, 97, 0),
+      0 2px 4px 0 rgba(93, 100, 148, 0);
+  }
+
+  60% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0.5, 0, -4deg) scale(1);
+    transform: perspective(400px) rotate3d(1, 0.5, 0, -4deg) scale(1);
+    box-shadow: 0 5px 15px 0 rgba(37, 44, 97, 0),
+      0 2px 4px 0 rgba(93, 100, 148, 0);
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0.5, 0, 2deg) scale(1);
+    transform: perspective(400px) rotate3d(1, 0.5, 0, 2deg) scale(1);
+    box-shadow: 0 5px 15px 0 rgba(37, 44, 97, 0.15),
+      0 2px 4px 0 rgba(93, 100, 148, 0.2);
+  }
+}
+
+@keyframes cardContainersAnim {
+  from {
+    transform: rotateY(180deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+.leaflet-control-container {
+  /* position: relative; */
+  /* z-index: 9999999999; */
+}
+.leaflet-draw.leaflet-control {
+  /* left: 0; */
+  /* right: inherit; */
+  /* position: fixed; */
+  /* top: 50%; */
+  width: 200px;
+}
+
+.leaflet-draw.leaflet-control a {
+  width: 100% !important;
+}
