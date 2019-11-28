@@ -1,5 +1,3 @@
-export const isOnline = navigator.onLine;
-
 /**
  * Detects whether window and document objects are available in current environment.
  */
@@ -7,6 +5,9 @@ export const isBrowser =
   typeof window !== "undefined" &&
   typeof document !== "undefined" &&
   window.document === document;
+
+export const isOnline = isBrowser && navigator.onLine
+
 
 // Get cycle day
 export const getCycleDay = () => {

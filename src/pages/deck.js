@@ -1,42 +1,43 @@
 /* @jsx jsx */
-import React, { Component } from "react";
-import ReactGA from "react-ga";
-import { css, jsx } from "@emotion/core";
-import { IMAGES_CDN } from "../scripts/constants";
+import React, { Component } from "react"
+import ReactGA from "react-ga"
+import { css, jsx } from "@emotion/core"
+import { IMAGES_CDN } from "../scripts/constants"
 
-import algoliasearch from "algoliasearch/lite";
+import algoliasearch from "algoliasearch/lite"
 import {
   InstantSearch,
   connectSearchBox,
   connectHits,
   connectRefinementList,
   Configure,
-  connectCurrentRefinements
-} from "react-instantsearch-dom";
+  connectCurrentRefinements,
+} from "react-instantsearch-dom"
 
-import Infos from "../components/Infos";
-import ability_cards from "../data/ability_cards";
-import styles from "../styles/globalStyles.css";
+import Infos from "../components/Infos"
+import Section from "../components/Section"
+import ability_cards from "../data/ability_cards"
+import styles from "../styles/globalStyles.css"
 
 const searchClient = algoliasearch(
   "2PHAMA0DA5",
   "6887572295e888df9306e9307b611e4d"
-);
+)
 
 const card_colors = {
   dead_eye: ["#e0a9a9", "#d88484", "#cc5050"],
   recovery: ["#bcd19d", "#6db579", "#489b5d"],
   combat: ["#fbe7be", "#f8d693", "#f5c25d"],
-  defense: ["#8eb7c1", "#248a9b", "#0b657a"]
-};
+  defense: ["#8eb7c1", "#248a9b", "#0b657a"],
+}
 const imageName = name =>
   name
     .replace(/\s+/g, "_")
     .replace("’", "")
-    .toUpperCase();
+    .toUpperCase()
 
 const FavoriteDeck = props => {
-  const { parent, onClick } = props;
+  const { parent, onClick } = props
 
   return (
     <div
@@ -45,10 +46,9 @@ const FavoriteDeck = props => {
       css={[
         styles.card_animation_wrapper,
         css`
-          background: rgba(0, 0, 0, 0.2)
-            url("/images/rough_bg.png") no-repeat center center /
-            cover;
-        `
+          background: rgba(0, 0, 0, 0.2) url("/images/rough_bg.png") no-repeat
+            center center / cover;
+        `,
       ]}
     >
       <div css={styles.card_animation}>
@@ -120,8 +120,8 @@ const FavoriteDeck = props => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
 const Card = props => {
   const {
@@ -132,8 +132,8 @@ const Card = props => {
     parent,
     display,
     onClick,
-    index
-  } = props;
+    index,
+  } = props
 
   return (
     <div
@@ -167,7 +167,7 @@ const Card = props => {
               transform: scale(1);
             }
           }
-        `
+        `,
       ]}
     >
       <div
@@ -176,7 +176,7 @@ const Card = props => {
           styles.card_animation,
           css`
             animation-delay: ${(100 + 150 * index) * 0.5}ms;
-          `
+          `,
         ]}
       >
         <button
@@ -191,7 +191,7 @@ const Card = props => {
               &:hover {
                 color: white;
               }
-            `
+            `,
           ]}
           onClick={onClick}
         >
@@ -254,8 +254,8 @@ const Card = props => {
               width: 100%;
               text-align: center;
               padding: 0.5em 0.85em;
-              background: url("/images/rank_shield.png") no-repea
-                center center / contain;
+              background: url("/images/rank_shield.png") no-repea center center /
+                contain;
               line-height: 1;
               width: 40px;
               height: 32px;
@@ -283,8 +283,8 @@ const Card = props => {
             <span
               className="p-8 d-inline-block va-middle"
               css={css`
-                background: url("/images/rank_shield.png")
-                  no-repeat center center / contain;
+                background: url("/images/rank_shield.png") no-repeat center
+                  center / contain;
                 margin-right: 4px;
               `}
             ></span>{" "}
@@ -293,8 +293,8 @@ const Card = props => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const Hits = ({ hits, parent }) => {
   return hits.map((hit, id) => (
@@ -308,8 +308,8 @@ const Hits = ({ hits, parent }) => {
       onClick={() => parent.handleClick(hit)}
       index={id}
     />
-  ));
-};
+  ))
+}
 
 const RefinementList = ({ items, refine, createURL, parent }) => (
   <div className="d-flex fxd-row jc-around fxw-wrap md:fxw-nowrap md:fxd-column">
@@ -322,12 +322,12 @@ const RefinementList = ({ items, refine, createURL, parent }) => (
               styles.button,
               css`
                 padding: 0;
-              `
+              `,
             ]}
             className="w-100p mr-8 mb-8 ov-hidden d-flex"
             onClick={() => {
-              refine(item.label);
-              parent.setState({ card_type: item.label });
+              refine(item.label)
+              parent.setState({ card_type: item.label })
             }}
           >
             {item.label !== "all" && (
@@ -359,20 +359,20 @@ const RefinementList = ({ items, refine, createURL, parent }) => (
       <CardClearRefinements parent={parent} />
     </span>
   </div>
-);
+)
 
 const ClearRefinements = ({ items, refine, parent }) => (
   <button
     css={styles.button}
     className="w-100p"
     onClick={() => {
-      refine(items);
-      parent.setState({ card_type: "all" });
+      refine(items)
+      parent.setState({ card_type: "all" })
     }}
   >
     All cards
   </button>
-);
+)
 
 const SearchBox = ({ currentRefinement, isSearchStalled, refine }) => (
   <form noValidate action="" role="search" className="w-100p mb-8">
@@ -383,12 +383,12 @@ const SearchBox = ({ currentRefinement, isSearchStalled, refine }) => (
       className="p-16 app-none bdw-0 bgc-transparent w-100p color-white fsz-24"
       placeholder="Search a term"
       css={css`
-        background: url("/images/rough_bg_input.png") no-repea
-          center center / 100% 100%;
+        background: url("/images/rough_bg_input.png") no-repea center center /
+          100% 100%;
       `}
     />
   </form>
-);
+)
 
 const DeckPreviewer = ({ fav_deck, dead_eye, parent }) => {
   return (
@@ -457,9 +457,7 @@ const DeckPreviewer = ({ fav_deck, dead_eye, parent }) => {
                     min-width: 140px;
                   `}
                   src={
-                    card
-                      ? card.image
-                      : "/images/ability_cards/CARD_BACK.png"
+                    card ? card.image : "/images/ability_cards/CARD_BACK.png"
                   }
                   alt={
                     card
@@ -480,20 +478,20 @@ const DeckPreviewer = ({ fav_deck, dead_eye, parent }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-const CardSearchBox = connectSearchBox(SearchBox);
+const CardSearchBox = connectSearchBox(SearchBox)
 
-const CardClearRefinements = connectCurrentRefinements(ClearRefinements);
+const CardClearRefinements = connectCurrentRefinements(ClearRefinements)
 
-const CardRefinementList = connectRefinementList(RefinementList);
+const CardRefinementList = connectRefinementList(RefinementList)
 
-const CardHits = connectHits(Hits);
+const CardHits = connectHits(Hits)
 
 class Deck extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       all_cards: [],
       all_cards_ready: false,
@@ -501,32 +499,32 @@ class Deck extends Component {
       card_type: "all",
       favorite_deck: [],
       favorite_dead_eye: [],
-      displayDeckPreviewer: false
-    };
+      displayDeckPreviewer: false,
+    }
   }
 
   orderCards = () => {
     ability_cards.map(cardType => {
-      cardType.cards.map(card => this.state.all_cards.push(card));
-    });
-    this.setState({ all_cards_ready: true });
-  };
+      cardType.cards.map(card => this.state.all_cards.push(card))
+    })
+    this.setState({ all_cards_ready: true })
+  }
 
   cardDisplay = type => {
-    let res;
+    let res
     if (this.state.card_type === type) {
-      res = true;
+      res = true
     } else if (this.state.card_type === "all") {
-      res = true;
+      res = true
     } else {
-      res = false;
+      res = false
     }
-    return res;
-  };
+    return res
+  }
 
   handleClick = card => {
-    let favDeck = this.state.favorite_deck;
-    let favDeadEye = this.state.favorite_dead_eye;
+    let favDeck = this.state.favorite_deck
+    let favDeadEye = this.state.favorite_dead_eye
 
     if (card.type === "dead_eye") {
       if (favDeadEye.length === 0) {
@@ -536,10 +534,10 @@ class Deck extends Component {
             card.name
           )}.png`,
           color: card_colors[card.type][this.state.card_level],
-          description: card.description
-        });
+          description: card.description,
+        })
       } else {
-        favDeadEye = [];
+        favDeadEye = []
       }
     } else {
       if (favDeck.length <= 2) {
@@ -549,22 +547,22 @@ class Deck extends Component {
             card.name
           )}.png`,
           color: card_colors[card.type][this.state.card_level],
-          description: card.description
-        });
+          description: card.description,
+        })
       } else {
-        favDeck = [];
+        favDeck = []
       }
     }
-    this.setState({ favorite_deck: favDeck, favorite_dead_eye: favDeadEye });
-  };
+    this.setState({ favorite_deck: favDeck, favorite_dead_eye: favDeadEye })
+  }
 
   displayDeck = () => {
-    this.setState({ displayDeckPreviewer: !this.state.displayDeckPreviewer });
-  };
+    this.setState({ displayDeckPreviewer: !this.state.displayDeckPreviewer })
+  }
 
   componentDidMount() {
-    ReactGA.pageview("/deck");
-    this.orderCards();
+    ReactGA.pageview("/deck")
+    this.orderCards()
   }
 
   render() {
@@ -574,119 +572,122 @@ class Deck extends Component {
         searchClient={searchClient}
       >
         <Configure hitsPerPage={50} />
+        <Section>
+          {this.state.displayDeckPreviewer && (
+            <DeckPreviewer
+              dead_eye={this.state.favorite_dead_eye}
+              fav_deck={this.state.favorite_deck}
+              parent={this}
+            />
+          )}
 
-        {this.state.displayDeckPreviewer && (
-          <DeckPreviewer
-            dead_eye={this.state.favorite_dead_eye}
-            fav_deck={this.state.favorite_deck}
-            parent={this}
-          />
-        )}
-
-        <div>
-          <header className="ta-center pb-32">
-            <h1>Red Dead Online Abilities Cards</h1>
-            <p>
-              Explore the different ability cards and learn more about what they
-              do
-            </p>
-          </header>
-          <div className="pos-relative">
-            <div className="md:d-grid g-6">
-              <div className=" md:gcstart-1 md:gcend-2 ">
-                <div className="md:pos-sticky md:top-16">
-                  <nav className="d-flex fxd-column md:pr-16 ov-auto">
-                    <div className="w-100p">
-                      <CardSearchBox />
-                    </div>
-                    <div
-                      className="d-none md:d-block"
-                      css={css`
-                        button {
-                          transform: scale(0) translateY(-50%);
-                          position: absolute;
-                          top: 50%;
-                          left: 0;
-                          right: 0;
-                          z-index: 9999;
-                          margin: auto;
-                        }
-
-                        &:hover {
-                          .deck {
-                            filter: blur(3px);
-                            opacity: 0.9;
-                          }
-
+          <div>
+            <header className="ta-center pb-32">
+              <h1>Red Dead Online Abilities Cards</h1>
+              <p>
+                Explore the different ability cards and learn more about what
+                they do
+              </p>
+            </header>
+            <div className="pos-relative">
+              <div className="md:d-grid g-6">
+                <div className=" md:gcstart-1 md:gcend-2 ">
+                  <div className="md:pos-sticky md:top-16">
+                    <nav className="d-flex fxd-column md:pr-16 ov-auto">
+                      <div className="w-100p">
+                        <CardSearchBox />
+                      </div>
+                      <div
+                        className="d-none md:d-block"
+                        css={css`
                           button {
-                            transform: scale(1) translateY(-50%);
+                            transform: scale(0) translateY(-50%);
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            right: 0;
+                            z-index: 9999;
+                            margin: auto;
                           }
-                        }
-                      `}
-                    >
-                      <header>
-                        <h3 className="lsp-big p-0 mt-8">Deck Preview</h3>
-                      </header>
-                      <div className="pos-relative">
-                        <button
-                          css={styles.button}
-                          onClick={() => this.displayDeck()}
-                        >
-                          Open current deck
-                        </button>
-                        <div className="deck">
-                          <FavoriteDeck parent={this} />
+
+                          &:hover {
+                            .deck {
+                              filter: blur(3px);
+                              opacity: 0.9;
+                            }
+
+                            button {
+                              transform: scale(1) translateY(-50%);
+                            }
+                          }
+                        `}
+                      >
+                        <header>
+                          <h3 className="lsp-big p-0 mt-8">Deck Preview</h3>
+                        </header>
+                        <div className="pos-relative">
+                          <button
+                            css={styles.button}
+                            onClick={() => this.displayDeck()}
+                          >
+                            Open current deck
+                          </button>
+                          <div className="deck">
+                            <FavoriteDeck parent={this} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="pv-16">
-                      <header>
-                        <h3 className="lsp-big p-0 mt-8">Card type</h3>
-                      </header>
-                      <CardRefinementList attribute="type" parent={this} />
-                    </div>
-                    <div className="pv-16">
-                      <header>
-                        <h3 className="lsp-big p-0 mt-8">Card level</h3>
-                      </header>
-                      <div className="d-flex fxd-row">
-                        {[0, 1, 2].map(level => (
-                          <button
-                            key={level}
-                            css={styles.button}
-                            className="w-auto mr-8 mb-8 fx-4"
-                            onClick={() => this.setState({ card_level: level })}
-                          >
-                            {level + 1 === 1
-                              ? "I"
-                              : level + 1 === 2
-                              ? "II"
-                              : level + 1 === 3
-                              ? "III"
-                              : null}
-                          </button>
-                        ))}
+                      <div className="pv-16">
+                        <header>
+                          <h3 className="lsp-big p-0 mt-8">Card type</h3>
+                        </header>
+                        <CardRefinementList attribute="type" parent={this} />
                       </div>
-                    </div>
-                  </nav>
+                      <div className="pv-16">
+                        <header>
+                          <h3 className="lsp-big p-0 mt-8">Card level</h3>
+                        </header>
+                        <div className="d-flex fxd-row">
+                          {[0, 1, 2].map(level => (
+                            <button
+                              key={level}
+                              css={styles.button}
+                              className="w-auto mr-8 mb-8 fx-4"
+                              onClick={() =>
+                                this.setState({ card_level: level })
+                              }
+                            >
+                              {level + 1 === 1
+                                ? "I"
+                                : level + 1 === 2
+                                ? "II"
+                                : level + 1 === 3
+                                ? "III"
+                                : null}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+
+                <div className="d-grid g-2 md:g-3 lg:g-4 ggap-8 pb-32 gcstart-2 gcend-7">
+                  <CardHits parent={this} />
                 </div>
               </div>
 
-              <div className="d-grid g-2 md:g-3 lg:g-4 ggap-8 pb-32 gcstart-2 gcend-7">
-                <CardHits parent={this} />
-              </div>
+              <Infos>
+                The majority of these informations has been extracted from{" "}
+                <a href="https://www.gtabase.com/news/red-dead-redemption-2/online/red-dead-online-ability-cards-full-list-of-character-abilities-loadout">
+                  This article
+                </a>
+              </Infos>
             </div>
-
-            <Infos>
-              The majority of these informations has been extracted from{" "}
-              <a href="https://www.gtabase.com/news/red-dead-redemption-2/online/red-dead-online-ability-cards-full-list-of-character-abilities-loadout">
-                This article
-              </a>
-            </Infos>
           </div>
-        </div>
+        </Section>
       </InstantSearch>
-    );
+    )
   }
 }
-export default Deck;
+export default Deck

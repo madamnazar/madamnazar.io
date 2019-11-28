@@ -104,22 +104,6 @@ export default {
     border-style: solid;
     border-width: 6px;
   `,
-  button: css`
-    background: rgba(0, 0, 0, 0.78);
-    color: var(--EcruWhite);
-    font-size: 18px;
-    padding: 10px 20px;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    text-align: center;
-    border: none;
-    outline: none;
-
-    &:hover {
-      background: var(--Tabasco);
-    }
-  `,
 
   button: css`
     background: var(--EcruWhite);
@@ -128,15 +112,21 @@ export default {
     padding: 10px 20px;
     border-radius: 4px;
     text-decoration: none;
+    border: none;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.48);
     cursor: pointer;
     display: block;
     text-align: center;
-    border: none;
     width: 100%;
+    position: relative;
 
     &:hover {
       background: var(--Tabasco);
       color: white;
+    }
+    &:active {
+      top: 2px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.48);
     }
   `,
   buttonActive: css`

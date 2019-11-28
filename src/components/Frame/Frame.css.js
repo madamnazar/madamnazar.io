@@ -7,10 +7,10 @@ export default {
     border-color: #2e2e2e;
     border-image-repeat: all;
     border-image-slice: 14;
-    border-image-outset: 3px;
+    border-image-outset: 0;
     border-image-source: url(${frame});
     border-style: solid;
-    border-width: 6px 0;
+    border-width: 1px 0;
     padding: 16px;
     text-align: center;
     font-family: "RDRrocks-sg";

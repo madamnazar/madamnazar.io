@@ -19,31 +19,42 @@ import HeatmapLayer from "react-leaflet-heatmap-layer"
 
 import Infos from "../components/Infos"
 
-import CollectorMap from "./collectorMap"
-import mapStyles from "./CollectorMap.css"
+import CollectorMap from "./CollectorMap"
 import styles from "../styles/globalStyles.css"
 import hideouts from "../data/maps/world/hideouts"
 
-import WorldMap from "../components/WordlMap.js/WorldMap"
+import WorldMap from "../components/WorldMap/WorldMap"
+import { isBrowser } from "../scripts/helpers"
 
-// console.log(world);
-// [
-//   "cities",
-//   "territories",
-//   "poker",
-//   "gunsmiths",
-//   "barbers",
-//   "post_offices",
-//   "shops",
-//   "fishing_shops",
-//   "doctors",
-//   "fences",
-//   "saloons",
-//   "photo_studios",
-//   "tailors",
-//   "fast_travel",
-//   "stables"
-// ].forEach(cat => console.log(JSON.stringify(world[0][`${cat}`])));
+
+const mapStyles = {
+  iframe: css`
+    background: var(--EcruWhite);
+    background: #d2b790;
+    width: 100%;
+
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+    position: relative;
+
+    &:after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
+      z-index: 50000;
+      user-select: none;
+      pointer-events: none;
+    }
+  `,
+}
 
 const worldLabels = [
   "cities",
@@ -288,165 +299,173 @@ class SimpleMap extends React.Component {
             <SimpleMapNavigation parent={this} />
           </div>
         </div>
-        <Map
-          center={[40, -60]}
-          zoom={this.state.currentZoom}
-          minZoom={this.state.minZoom}
-          maxZoom={this.state.maxZoom}
-          noWrap={true}
-          bounds={this.getBounds()}
-          boundsOptions={{ padding: [1, 1] }}
-          boxZoom={true}
-          zoomControl={false}
-          gradient={gradient}
-          style={{ height: this.state.mapExpanded === false ? 700 : "100%" }}
-          dragging={true}
-          onClick={this.handleClick}
-          ref={ref => {
-            this.map = ref
-          }}
-        >
-          {this.props.map === "simple" && (
-            <FeatureGroup>
-              <EditControl
-                position="bottomleft"
-                onEdited={this._onEditPath}
-                onCreated={e => {
-                  var layer = e.layer
-                  console.log(layer.getLatLngs()[0])
-                }}
-                onDeleted={this._onDeleted}
-                // onDrawStop={e => {
-                //   const type = e.layerType;
-                //   const layer = e.layer;
+        {isBrowser && (
+          <Map
+            center={[40, -60]}
+            zoom={this.state.currentZoom}
+            minZoom={this.state.minZoom}
+            maxZoom={this.state.maxZoom}
+            noWrap={true}
+            bounds={this.getBounds()}
+            boundsOptions={{ padding: [1, 1] }}
+            boxZoom={true}
+            zoomControl={false}
+            gradient={gradient}
+            style={{ height: this.state.mapExpanded === false ? 700 : "100%" }}
+            dragging={true}
+            onClick={this.handleClick}
+            ref={ref => {
+              this.map = ref
+            }}
+          >
+            {this.props.map === "simple" && (
+              <FeatureGroup>
+                <EditControl
+                  position="bottomleft"
+                  onEdited={this._onEditPath}
+                  onCreated={e => {
+                    var layer = e.layer
+                    console.log(layer.getLatLngs()[0])
+                  }}
+                  onDeleted={this._onDeleted}
+                  // onDrawStop={e => {
+                  //   const type = e.layerType;
+                  //   const layer = e.layer;
 
-                //   console.log("draw:created->", e);
-                //   // console.log(JSON.stringify(layer.toGeoJSON()));
-                // }}
-                draw={{
-                  polyline: false,
-                  circle: false,
-                  marker: false,
-                  circlemarker: false,
-                }}
-              />
-            </FeatureGroup>
-          )}
-          {this.state.markersOn && this.props.type === "complex"
-            ? this.props.data.map(it =>
-                worldLabels.map(type =>
-                  it[type].map(item =>
-                    item.bounds ? (
-                      <Polygon
-                        positions={item.bounds}
-                        color={item.color ? item.color : "var(--Tabasco)"}
-                      />
-                    ) : (
-                      <Marker
-                        position={
-                          item.x && item.y
-                            ? [item.x, item.y]
-                            : [item.lat, item.lng]
-                        }
-                        key={item.name}
-                        icon={
-                          type !== "cities" && type !== "regions"
-                            ? leaflet.icon({
-                                iconUrl: `/images/map-icons/pin-${type.replace(
-                                  "_",
-                                  "-"
-                                )}.png`,
-                                ...markerOptions,
-                                iconAnchor: [10, 41],
-                                iconSize: [25, 40],
-                                // shadowUrl: require("/images/danger-shadow.png")
-                              })
-                            : normalMarker
-                        }
-                      >
-                        <Tooltip direction="top" offset={[-0, -20]} opacity={1}>
-                          <span
-                            css={css`
-                              font-family: "RDRHapna-Regular";
-                            `}
+                  //   console.log("draw:created->", e);
+                  //   // console.log(JSON.stringify(layer.toGeoJSON()));
+                  // }}
+                  draw={{
+                    polyline: false,
+                    circle: false,
+                    marker: false,
+                    circlemarker: false,
+                  }}
+                />
+              </FeatureGroup>
+            )}
+            {this.state.markersOn && this.props.type === "complex"
+              ? this.props.data.map(it =>
+                  worldLabels.map(type =>
+                    it[type].map(item =>
+                      item.bounds ? (
+                        <Polygon
+                          positions={item.bounds}
+                          color={item.color ? item.color : "var(--Tabasco)"}
+                        />
+                      ) : (
+                        <Marker
+                          position={
+                            item.x && item.y
+                              ? [item.x, item.y]
+                              : [item.lat, item.lng]
+                          }
+                          key={item.name}
+                          icon={
+                            type !== "cities" && type !== "regions"
+                              ? leaflet.icon({
+                                  iconUrl: `/images/map-icons/pin-${type.replace(
+                                    "_",
+                                    "-"
+                                  )}.png`,
+                                  ...markerOptions,
+                                  iconAnchor: [10, 41],
+                                  iconSize: [25, 40],
+                                  // shadowUrl: require("/images/danger-shadow.png")
+                                })
+                              : normalMarker
+                          }
+                        >
+                          <Tooltip
+                            direction="top"
+                            offset={[-0, -20]}
+                            opacity={1}
                           >
-                            {item.name}
-                          </span>
-                          {item.location && (
-                            <span>
-                              <p>{item.location.name}</p>
-                              <p>
-                                {item.location.region !== "TDF" &&
-                                  item.location.region}
-                              </p>
-                              <p>
-                                {item.location.territory.name !== "TDF" &&
-                                  item.location.territory.name}
-                              </p>
-                              <p>
-                                {item.location.territory.code !== "TDF" &&
-                                  item.location.territory.code}
-                              </p>
+                            <span
+                              css={css`
+                                font-family: "RDRHapna-Regular";
+                              `}
+                            >
+                              {item.name}
                             </span>
-                          )}
-                          {/* <pre>{JSON.stringify(item.location)}</pre> */}
-                        </Tooltip>
-                      </Marker>
+                            {item.location && (
+                              <span>
+                                <p>{item.location.name}</p>
+                                <p>
+                                  {item.location.region !== "TDF" &&
+                                    item.location.region}
+                                </p>
+                                <p>
+                                  {item.location.territory.name !== "TDF" &&
+                                    item.location.territory.name}
+                                </p>
+                                <p>
+                                  {item.location.territory.code !== "TDF" &&
+                                    item.location.territory.code}
+                                </p>
+                              </span>
+                            )}
+                            {/* <pre>{JSON.stringify(item.location)}</pre> */}
+                          </Tooltip>
+                        </Marker>
+                      )
                     )
                   )
                 )
-              )
-            : this.state.markersOn &&
-              this.props.type !== "complex" &&
-              this.props.data.map(it => (
-                <Marker
-                  position={it.x && it.y ? [it.x, it.y] : [it.lat, it.lng]}
-                  key={it.name}
-                  icon={
-                    this.props.map === "hideouts" ? hideoutMarker : normalMarker
-                  }
-                >
-                  <Tooltip direction="top" offset={[-0, -20]} opacity={1}>
-                    <span
-                      css={css`
-                        font-family: "RDRHapna-Regular";
-                      `}
-                    >
-                      {it.name}
-                    </span>
-                    <p>{it.comment}</p>
-                  </Tooltip>
-                </Marker>
-              ))}
-          }
-          {this.props.map === "simple" && this.state.currentPos && (
-            <Marker position={this.state.currentPos} draggable={true}>
-              <Popup position={this.state.currentPos}>
-                Current location:{" "}
-                <pre>{JSON.stringify(this.state.currentPos, null, 2)}</pre>
-              </Popup>
-            </Marker>
-          )}
-          {this.state.heatMapOn && (
-            <HeatmapLayer
-              fitBoundsOnLoad
-              fitBoundsOnUpdate
-              points={this.props.data}
-              longitudeExtractor={m => m.lng}
-              latitudeExtractor={m => m.lat}
-              intensityExtractor={m => parseFloat(m.name)}
-              radius={Number(this.state.radius)}
-              blur={Number(this.state.blur)}
-              max={Number.parseFloat(this.state.max)}
+              : this.state.markersOn &&
+                this.props.type !== "complex" &&
+                this.props.data.map(it => (
+                  <Marker
+                    position={it.x && it.y ? [it.x, it.y] : [it.lat, it.lng]}
+                    key={it.name}
+                    icon={
+                      this.props.map === "hideouts"
+                        ? hideoutMarker
+                        : normalMarker
+                    }
+                  >
+                    <Tooltip direction="top" offset={[-0, -20]} opacity={1}>
+                      <span
+                        css={css`
+                          font-family: "RDRHapna-Regular";
+                        `}
+                      >
+                        {it.name}
+                      </span>
+                      <p>{it.comment}</p>
+                    </Tooltip>
+                  </Marker>
+                ))}
+            }
+            {this.props.map === "simple" && this.state.currentPos && (
+              <Marker position={this.state.currentPos} draggable={true}>
+                <Popup position={this.state.currentPos}>
+                  Current location:{" "}
+                  <pre>{JSON.stringify(this.state.currentPos, null, 2)}</pre>
+                </Popup>
+              </Marker>
+            )}
+            {this.state.heatMapOn && (
+              <HeatmapLayer
+                fitBoundsOnLoad
+                fitBoundsOnUpdate
+                points={this.props.data}
+                longitudeExtractor={m => m.lng}
+                latitudeExtractor={m => m.lat}
+                intensityExtractor={m => parseFloat(m.name)}
+                radius={Number(this.state.radius)}
+                blur={Number(this.state.blur)}
+                max={Number.parseFloat(this.state.max)}
+              />
+            )}
+            <TileLayer
+              attribution="© madamnazar.io"
+              // url="http://jeanropke.github.io/RDR2CollectorsMap/assets/maps/detailed/{z}/{x}_{y}.jpg"
+              url="https://lukyvj.github.io/nazarfinder-images/{z}/{x}_{y}.jpg"
+              // url="https://lukyvj.github.io/fortnite-maps/0/{z}-{x}-{y}.jpg?v=99"
             />
-          )}
-          <TileLayer
-            attribution="© madamnazar.io"
-            // url="http://jeanropke.github.io/RDR2CollectorsMap/assets/maps/detailed/{z}/{x}_{y}.jpg"
-            url="https://lukyvj.github.io/nazarfinder-images/{z}/{x}_{y}.jpg"
-            // url="https://lukyvj.github.io/fortnite-maps/0/{z}-{x}-{y}.jpg?v=99"
-          />
-        </Map>
+          </Map>
+        )}
       </div>
     )
   }

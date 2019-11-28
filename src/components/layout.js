@@ -168,8 +168,7 @@ class Layout extends React.Component {
                   <div
                     style={{
                       margin: `0 auto`,
-                      maxWidth:
-                        window.location.pathname === "/maps" ? "100%" : 960,
+                      maxWidth: "100%",
                       padding: `0`,
                       paddingTop: 0,
                     }}

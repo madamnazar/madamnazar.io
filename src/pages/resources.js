@@ -4,7 +4,8 @@ import ReactGA from "react-ga";
 import { css, jsx } from "@emotion/core";
 import { resources, showcase } from "../data/resources";
 import Infos from "../components/Infos"
-import Image from "../components/Image";
+import Image from "../components/Img";
+import Section from "../components/Section";
 import styles from "../styles/globalStyles.css";
 
 class Ecosystem extends Component {
@@ -21,6 +22,7 @@ class Ecosystem extends Component {
     console.log(showcase[0]);
     return (
       <>
+      <Section>
         <Infos>
           <h2>Find resources for Red dead redemption 2</h2>
           <h3>
@@ -141,6 +143,7 @@ class Ecosystem extends Component {
             ))}
           </section>
         </div>
+        </Section>
       </>
     );
   }

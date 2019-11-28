@@ -9,19 +9,124 @@ import Map from "../components/Map/Map"
 import Context from '../components/Context'
 
 import Layout from "../components/layout"
-import Image from "../components/image"
+import Image from "../components/Img"
 import SEO from "../components/seo"
-import { formatDate } from "../scripts/helpers"
-
+import Section from "../components/Section"
+import { formatDate, isBrowser} from "../scripts/helpers"
 
 //// Define apis
 import mockData from "../data/mock"
 import { DEV_API, PROD_API, MOCK_API } from "../scripts/constants"
 
-import styles from "./Finder.css"
 const bgMainSml = "/images/bgMainSml.jpg"
+const sheet = "/images/sheet.png"
 
 const url = process.env.NODE_ENV === "development" ? DEV_API : PROD_API
+
+const styles = {
+  posterGrid: css``,
+  posterWrapper: css`
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.4));
+  `,
+  posterLayout: css`
+    position: relative;
+
+    margin: auto;
+    border-radius: 138px;
+    z-index: 2;
+
+    .header {
+      text-align: center;
+    }
+
+    @media (min-width: 960px) {
+      padding: 0 2em;
+    }
+  `,
+  badge: css`
+    width: 120px;
+    height: 120px;
+    border-radius: 100px;
+    border: 4px solid var(--Armadillo);
+    background: var(--Twine);
+    box-shadow: 0 0 32px rgba(0, 0, 0, 0.2);
+    display: block;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 100px auto;
+    animation: roll 2s ease infinite;
+    filter: sepia(1) saturate(0.65);
+
+    img {
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    @keyframes roll {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  `,
+  avatar: css`
+    animation: blur 5s forwards;
+    height: 100px;
+    max-height: 640px;
+    max-width: 640px;
+    position: relative;
+    width: 100px;
+    overflow: hidden;
+
+    div {
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
+
+    .normal {
+      background-size: cover;
+    }
+
+    .invert {
+      animation: mask 5s steps(69) forwards;
+      background-size: cover;
+      filter: invert(1) grayscale(1);
+      -webkit-mask: url(${sheet});
+      -webkit-mask-size: 7000% 100%;
+      mask: url(${sheet});
+      mask-size: 7000% 100%;
+    }
+
+    @keyframes blur {
+      from {
+        filter: blur(3px);
+        opacity: 0;
+      }
+      to {
+        filter: blur(0px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes mask {
+      from {
+        -webkit-mask-position: 0% 0;
+        mask-position: 0% 0;
+      }
+      to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+      }
+    }
+  `,
+}
+
 
 const capitalize = string => {
   return string.charAt(0).toUpperCase() + string.slice(1)
@@ -166,15 +271,6 @@ const InfoBox = props => {
                       action: "Open First image",
                     })
                   }}
-                  childrenStyle={css`
-                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
-                    transform: rotate(-0.3deg);
-                    filter: sepia(1) saturate(0.65);
-
-                    @media (max-width: 960px) {
-                      width: 100% !important;
-                    }
-                  `}
                 />
 
                 <RDAppear
@@ -192,15 +288,6 @@ const InfoBox = props => {
                       action: "Open Second image",
                     })
                   }}
-                  childrenStyle={css`
-                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
-                    transform: rotate(-0.3deg);
-                    filter: sepia(1) saturate(0.65);
-
-                    @media (max-width: 960px) {
-                      width: 100% !important;
-                    }
-                  `}
                 />
               </div>
             </div>
@@ -233,13 +320,13 @@ class Finder extends Component {
   setSize = () => {
     this.setState({
       frameWidth:
-        document.getElementById("frame").getBoundingClientRect().width - 100,
+        document.getElementById("container").getBoundingClientRect().width - 100,
     })
 
     window.addEventListener("resize", () => {
       this.setState({
         frameWidth:
-          document.getElementById("frame").getBoundingClientRect().width - 100,
+          document.getElementById("container").getBoundingClientRect().width - 100,
       })
     })
   }
@@ -285,37 +372,43 @@ class Finder extends Component {
 
   render() {
     const isStoredAlready =
-      Cookies.get("finderApiResponse") !== undefined ? true : false
-    const API = JSON.parse(Cookies.get("finderApiResponse"));
+      isBrowser && Cookies.get("finderApiResponse") !== undefined ? true : false
+    const API = isBrowser && JSON.parse(Cookies.get("finderApiResponse"))
 
     console.log(API)
     return (
       <>
-        {isStoredAlready ? (
-          <InfoBox
-            id={API.data._id}
-            media={API.data.location.image}
-            region={API.data.location.region.name}
-            region_precise={API.data.location.region.precise}
-            nearby={API.data.location["near_by"]}
-            cardinals={API.data.location.cardinals.full}
-            isNewlocation={true}
-            dataFor={API.dataFor}
-            parent={this}
-          />
-        ) : (
-          <InfoBox
-            id={this.state.data._id}
-            media={this.state.data.location.image}
-            region={this.state.data.location.region.name}
-            region_precise={this.state.data.location.region.precise}
-            nearby={this.state.data.location["near_by"]}
-            cardinals={this.state.data.location.cardinals.full}
-            isNewlocation={this.state}
-            dataFor={this.state.dataFor}
-            parent={this}
-          />
-        )}
+        <Section id="container">
+          {isBrowser && (
+            <>
+              {isStoredAlready ? (
+                <InfoBox
+                  id={API.data._id}
+                  media={API.data.location.image}
+                  region={API.data.location.region.name}
+                  region_precise={API.data.location.region.precise}
+                  nearby={API.data.location["near_by"]}
+                  cardinals={API.data.location.cardinals.full}
+                  isNewlocation={true}
+                  dataFor={API.dataFor}
+                  parent={this}
+                />
+              ) : (
+                <InfoBox
+                  id={this.state.data._id}
+                  media={this.state.data.location.image}
+                  region={this.state.data.location.region.name}
+                  region_precise={this.state.data.location.region.precise}
+                  nearby={this.state.data.location["near_by"]}
+                  cardinals={this.state.data.location.cardinals.full}
+                  isNewlocation={this.state}
+                  dataFor={this.state.dataFor}
+                  parent={this}
+                />
+              )}
+            </>
+          )}
+        </Section>
       </>
     )
   }

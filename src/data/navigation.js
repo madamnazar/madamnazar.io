@@ -1,75 +1,83 @@
+import React from "react"
 import ReactGA from "react-ga";
-import { TWITTER_URL, DISCORD_URL } from "../scripts/constants";
+import { DISCORD_URL } from "../scripts/constants";
+
 
 export const navigation = [
-  {
-    title: "Finder",
-    url: "/finder",
-    appLink: true,
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Click Finder link"
-      });
-    }
-  },
-  {
-    title: "Maps",
-    appLink: true,
-    url: "/maps",
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Go to maps"
-      });
-    }
-  },
-  {
-    title: "Deck",
-    appLink: true,
-    url: "/deck",
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Go to deck"
-      });
-    }
-  },
-  {
-    title: "Resources",
-    appLink: true,
-    url: "/resources",
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Go to Resources"
-      });
-    }
-  },
-  {
-    title: "About",
-    url: "/about",
-    appLink: true,
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Click About link"
-      });
-    }
-  },
-  {
-    title: "Discord",
-    target: "_blank",
-    rel: "noreferrer noopener",
-    url: DISCORD_URL,
-    onclick: () => {
-      ReactGA.event({
-        category: "click.nav.link",
-        action: "Click Discord link"
-      });
-    }
-  }
-];
+         {
+           title: "Finder",
+           url: "/finder",
+           appLink: true,
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Click Finder link",
+             })
+           },
+           icon: require(`react-feather/dist/icons/crosshair`).default,
+         },
+         {
+           title: "Maps",
+           appLink: true,
+           url: "/maps",
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Go to maps",
+             })
+           },
+           icon: require(`react-feather/dist/icons/map`).default,
+         },
+         {
+           title: "Deck",
+           appLink: true,
+           url: "/deck",
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Go to deck",
+             })
+           },
+           icon: require(`react-feather/dist/icons/grid`).default,
+         },
+         {
+           title: "Resources",
+           appLink: true,
+           url: "/resources",
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Go to Resources",
+             })
+           },
+           icon: require(`react-feather/dist/icons/book`).default,
+         },
+         {
+           title: "About",
+           url: "/about",
+           appLink: true,
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Click About link",
+             })
+           },
+           icon: require(`react-feather/dist/icons/info`).default,
+         },
+         {
+           title: "Discord",
+           target: "_blank",
+           rel: "noreferrer noopener",
+           url: DISCORD_URL,
+           onclick: () => {
+             ReactGA.event({
+               category: "click.nav.link",
+               action: "Click Discord link",
+             })
+           },
+           icon: require(`react-feather/dist/icons/message-square`).default,
+         },
+       ]
 
 /**
  * {

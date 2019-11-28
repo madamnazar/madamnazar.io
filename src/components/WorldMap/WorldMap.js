@@ -15,16 +15,45 @@ import {
 } from "react-leaflet"
 
 import HeatmapLayer from "react-leaflet-heatmap-layer"
-import mapStyles from "../../pages/CollectorMap.css"
+import {isBrowser} from "../../scripts/helpers"
 import styles from "../../styles/globalStyles.css"
 
 import world from "../../data/maps/world"
 
-const loadMap = true
+const loadMap = true;
+
+
+const mapStyles = {
+  iframe: css`
+    background: var(--EcruWhite);
+    background: #d2b790;
+    width: 100%;
+
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+    position: relative;
+
+    &:after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
+      z-index: 50000;
+      user-select: none;
+      pointer-events: none;
+    }
+  `,
+}
 
 const worldLabels = [
   //   "cities",
-  { name: "territories", id: "territories" },
   //   "regions",
   { name: "poker", id: "poker" },
   { name: "gunsmiths", id: "gunsmith" },
@@ -172,7 +201,7 @@ const SimpleMapNavigation = ({ parent }) => {
                     `}
                   >
                     <img
-                      src={`images/map-icons/pin-${type.name.replace(
+                      src={`images/map-icons/2/pin-${type.name.replace(
                         "_",
                         "-"
                       )}.png`}
@@ -321,11 +350,11 @@ class WorldMap extends React.Component {
       shadowAnchor: [40, 45], // the same for the shadow
       popupAnchor: [-3, -76], // point from which the popup should open relative
       iconAnchor: [10, 41], // point of the icon which will correspond to marker's location
-      iconSize: [25, 40], // size of the icon
+      iconSize: [25, 30.24], // size of the icon
       shadowUrl: "/images/map-icons/shadow.png",
     }
 
-    const normalMarker = leaflet.icon({
+    const normalMarker = isBrowser && leaflet.icon({
       iconUrl: "/images/pin.png",
       ...markerOptions,
     })
@@ -383,129 +412,132 @@ class WorldMap extends React.Component {
           </div>
         </div>
         <div className="gcstart-1 md:gcstart-4 gcend-13">
-          <Map
-            center={this.state.center}
-            zoom={this.state.currentZoom}
-            minZoom={this.state.minZoom}
-            maxZoom={this.state.maxZoom}
-            animate={true}
-            noWrap={true}
-            maxBounds={[
-              // [-23.981233711026714, -184.33965792896282],
-              // [84.90166435265932, -184.33965792896282],
-              // [84.90166435265932, 73.79883293486286],
-              // [-23.981233711026714, 73.79883293486286]
-              [-24.981233711026714, -185.33965792896282],
-              [85.90166435265932, -185.33965792896282],
-              [85.90166435265932, 74.79883293486286],
-              [-24.981233711026714, 74.79883293486286],
-            ]}
-            boundsOptions={{ padding: [1, 1] }}
-            boxZoom={true}
-            zoomControl={false}
-            gradient={gradient}
-            style={{
-              height: this.state.mapExpanded === false ? 700 : "100%",
-            }}
-            dragging={true}
-            onClick={this.handleClick}
-            ref={ref => {
-              this.map = ref
-            }}
-          >
-            {world.map(it =>
-              worldLabels.map(type =>
-                it[type.name].map((item, i) =>
-                  item.bounds ? (
-                    item.type === "territory" && this.state.showTerritories === true ? (
-                      <Polygon
-                        positions={item.bounds}
-                        color={item.color ? item.color : "var(--Tabasco)"}
-                      />
-                    ) : null
-                  ) : (
-                    this.state.markersOn === true &&
-                    loadMap === true && (
-                      <Marker
-                        position={[item.lat, item.lng]}
-                        key={item.name + i}
-                        opacity={
-                          this.state.displayOnMap.find(
-                            i =>
-                              i.name ===
-                              item.name.toLowerCase().replace(" ", "_")
-                          ).display
-                            ? 1
-                            : 0
-                        }
-                        icon={
-                          type.name !== "cities" &&
-                          type.name !== "regions" &&
-                          type.name !== "territories"
-                            ? leaflet.icon({
-                                iconUrl: `..//images/map-icons/pin-${type.name.replace(
-                                  "_",
-                                  "-"
-                                )}.png`,
-                                ...markerOptions,
-                              })
-                            : normalMarker
-                        }
-                      >
-                        <Tooltip direction="top" offset={[-0, -20]} opacity={1}>
-                          <span
-                            css={css`
-                              font-family: "RDRHapna-Regular";
-                            `}
+          {isBrowser && (
+            <Map
+              center={this.state.center}
+              zoom={this.state.currentZoom}
+              minZoom={this.state.minZoom}
+              maxZoom={this.state.maxZoom}
+              animate={true}
+              noWrap={true}
+              maxBounds={[
+                [-24.981233711026714, -185.33965792896282],
+                [85.90166435265932, -185.33965792896282],
+                [85.90166435265932, 74.79883293486286],
+                [-24.981233711026714, 74.79883293486286],
+              ]}
+              boundsOptions={{ padding: [1, 1] }}
+              boxZoom={true}
+              zoomControl={false}
+              gradient={gradient}
+              style={{
+                height: this.state.mapExpanded === false ? 700 : "100%",
+              }}
+              dragging={true}
+              onClick={this.handleClick}
+              ref={ref => {
+                this.map = ref
+              }}
+            >
+              {world.map(it =>
+                worldLabels.map(type =>
+                  it[type.name].map((item, i) =>
+                    item.bounds ? (
+                      item.type === "territory" &&
+                      this.state.showTerritories === true ? (
+                        <Polygon
+                          positions={item.bounds}
+                          color={item.color ? item.color : "var(--Tabasco)"}
+                        />
+                      ) : null
+                    ) : (
+                      this.state.markersOn === true &&
+                      loadMap === true && (
+                        <Marker
+                          position={[item.lat, item.lng]}
+                          key={item.name + i}
+                          opacity={
+                            this.state.displayOnMap.find(
+                              i =>
+                                i.name ===
+                                item.name.toLowerCase().replace(" ", "_")
+                            ).display
+                              ? 1
+                              : 0
+                          }
+                          icon={
+                            type.name !== "cities" &&
+                            type.name !== "regions" &&
+                            type.name !== "territories"
+                              ? leaflet.icon({
+                                  iconUrl: `../images/map-icons/2/pin-${type.name.replace(
+                                    "_",
+                                    "-"
+                                  )}.png`,
+                                  ...markerOptions,
+                                })
+                              : normalMarker
+                          }
+                        >
+                          <Tooltip
+                            direction="top"
+                            offset={[-0, -20]}
+                            opacity={1}
                           >
-                            {item.name}
-                          </span>
-                          {item.location && (
-                            <span>
-                              <p>{item.location.name}</p>
-                              <p>
-                                {item.location.region !== "TDF" &&
-                                  item.location.region}
-                              </p>
-                              <p>
-                                {item.location.territory.name !== "TDF" &&
-                                  item.location.territory.name}
-                              </p>
-                              <p>
-                                {item.location.territory.code !== "TDF" &&
-                                  item.location.territory.code}
-                              </p>
+                            <span
+                              css={css`
+                                font-family: "RDRHapna-Regular";
+                              `}
+                            >
+                              {item.name}
                             </span>
-                          )}
-                          {/* <pre>{JSON.stringify(item.location)}</pre> */}
-                        </Tooltip>
-                      </Marker>
+                            {item.location && (
+                              <span>
+                                <p>{item.location.name}</p>
+                                <p>
+                                  {item.location.region !== "TDF" &&
+                                    item.location.region}
+                                </p>
+                                <p>
+                                  {item.location.territory.name !== "TDF" &&
+                                    item.location.territory.name}
+                                </p>
+                                <p>
+                                  {item.location.territory.code !== "TDF" &&
+                                    item.location.territory.code}
+                                </p>
+                              </span>
+                            )}
+                            {/* <pre>{JSON.stringify(item.location)}</pre> */}
+                          </Tooltip>
+                        </Marker>
+                      )
                     )
                   )
                 )
-              )
-            )}
+              )}
 
-            {this.state.heatMapOn && (
-              <HeatmapLayer
-                fitBoundsOnLoad
-                fitBoundsOnUpdate
-                points={this.state.heatMapPoints}
-                longitudeExtractor={m => m.lng}
-                latitudeExtractor={m => m.lat}
-                intensityExtractor={m => parseFloat(m.name)}
-                radius={Number(this.state.radius)}
-                blur={Number(this.state.blur)}
-                max={Number.parseFloat(this.state.max)}
+              {this.state.heatMapOn && (
+                <HeatmapLayer
+                  fitBoundsOnLoad
+                  fitBoundsOnUpdate
+                  points={this.state.heatMapPoints}
+                  longitudeExtractor={m => m.lng}
+                  latitudeExtractor={m => m.lat}
+                  intensityExtractor={m => parseFloat(m.name)}
+                  radius={Number(this.state.radius)}
+                  blur={Number(this.state.blur)}
+                  max={Number.parseFloat(this.state.max)}
+                />
+              )}
+              <TileLayer
+                attribution="© madamnazar.io"
+                // url="http://jeanropke.github.io/RDR2CollectorsMap/assets/maps/detailed/{z}/{x}_{y}.jpg"
+                url="https://lukyvj.github.io/nazarfinder-images/{z}/{x}_{y}.jpg"
+                // url="https://lukyvj.github.io/fortnite-maps/0/{z}-{x}-{y}.jpg?v=99"
               />
-            )}
-            <TileLayer
-              attribution="© madamnazar.io"
-              // url="http://jeanropke.github.io/RDR2CollectorsMap/assets/maps/detailed/{z}/{x}_{y}.jpg"
-              url="https://lukyvj.github.io/nazarfinder-images/{z}/{x}_{y}.jpg"
-              // url="https://lukyvj.github.io/fortnite-maps/0/{z}-{x}-{y}.jpg?v=99"
-            />
-          </Map>
+            </Map>
+          )}
         </div>
       </div>
     )

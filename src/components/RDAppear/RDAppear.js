@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import React, { Component } from "react";
-import { css, jsx } from "@emotion/core";
-const sheet = "..//images/sheet.png";
+import React, { Component } from "react"
+import { css, jsx } from "@emotion/core"
+const sheet = "..//images/sheet.png"
 
 class RDAppear extends Component {
   render() {
@@ -85,15 +85,37 @@ class RDAppear extends Component {
             mask-position: 100% 0;
           }
         }
-      `
-    };
+      `,
+    }
     return (
       <div css={styles.root} {...this.props}>
-        <div className="normal" css={this.props.childrenStyle}></div>
-        <div className="invert" css={this.props.childrenStyle}></div>
+        <div
+          className="normal"
+          css={css`
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+            transform: rotate(-0.3deg);
+            filter: sepia(1) saturate(0.65);
+
+            @media (max-width: 960px) {
+              width: 100% !important;
+            }
+          `}
+        ></div>
+        <div
+          className="invert"
+          css={css`
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+            transform: rotate(-0.3deg);
+            filter: sepia(1) saturate(0.65);
+
+            @media (max-width: 960px) {
+              width: 100% !important;
+            }
+          `}
+        ></div>
       </div>
-    );
+    )
   }
 }
 
-export default RDAppear;
+export default RDAppear
