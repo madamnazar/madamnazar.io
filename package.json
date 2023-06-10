@@ -9,7 +9,7 @@
     "algoliasearch": "^3.35.1",
     "emotion": "^10.0.23",
     "eslint-utils": "^1.4.3",
-    "gatsby": "^2.17.6",
+    "gatsby": "^4.25.7",
     "gatsby-cli": "^2.8.8",
     "gatsby-image": "^2.2.30",
     "gatsby-plugin-layout": "^1.1.13",
